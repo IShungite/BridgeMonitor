@@ -5,17 +5,28 @@
     DateTime closing = (DateTime)Model.ClosingDate;
     DateTime now = (DateTime)Model.ReopeningDate;
     TimeSpan diff = closing.Subtract(now);
+
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <div class="text-left">
         <div>Nom: @Model.BoatName / Type: @Model.ClosingType</div>
-        <div>Prochaine fermeture le @Model.ClosingDate.DayOfWeek @Model.ClosingDate.TimeOfDay</div>
+        <div>Prochaine fermeture le @closing.DayOfWeek @closing.TimeOfDay</div>
         <div>Réouverture le @Model.ReopeningDate.DayOfWeek @Model.ReopeningDate.TimeOfDay</div>
         <div>Durée: @diff.ToString(@"hh\:mm")</div>
 
         <div>Prochaine fermeture dans <span id="timeRemaining"></span></div>
+        <div>
+            Risque de bouchons : @if ((closing.Hour >= 7 && closing.Hour <= 9) || (closing.Hour >= 17 && closing.Hour <= 19))
+            {
+                <text>élevé</text>
+            }
+            else
+            {
+                <text>faible</text>
+            }
+        </div>
     </div>
 </div>
 
