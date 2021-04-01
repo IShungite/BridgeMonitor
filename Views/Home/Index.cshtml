@@ -1,4 +1,4 @@
-﻿@model Boat
+﻿@model Closurse
 @{
     ViewData["Title"] = "Prochaine fermeture";
 
@@ -31,18 +31,13 @@
 
 @section Scripts {
     <script type="text/javascript">
-        const closingDate = "@closing";
-
-
-        const countDownDate = new Date(closingDate).getTime();
-
-        console.log(closingDate);
-        console.log(countDownDate);
+        var closingDate = "@closing";
+        closingDate = new Date(closingDate).getTime();
 
         const timer = setInterval(function() {
             const now = new Date().getTime()
             console.log(now);
-            const distance = countDownDate - now;
+            const distance = closingDate - now;
 
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));

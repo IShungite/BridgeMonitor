@@ -4,7 +4,7 @@ using System;
 
 namespace BridgeMonitor.Models
 {
-    public class Boat
+    public class Closurse
     {
         [JsonProperty("boat_name")]
         public string BoatName;

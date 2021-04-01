@@ -22,12 +22,18 @@ namespace BridgeMonitor.Controllers
 
         public IActionResult Index()
         {
-            return View(GetBoatsFromApi()[0]);
+            var closurses = GetClosursesFromApi();
+
+            var now = DateTime.Now;
+
+            closurses.RemoveAll(closurse => closurse.ReopeningDate < now);
+
+            return View(closurses[0]);
         }
 
         public IActionResult AllClosures()
         {
-            return View(GetBoatsFromApi());
+            return View(GetClosursesFromApi());
         }
         public IActionResult ClosureDetail()
         {
@@ -40,16 +46,16 @@ namespace BridgeMonitor.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private static List<Boat> GetBoatsFromApi()
+        private static List<Closurse> GetClosursesFromApi()
         {
             var client = new HttpClient();
 
             var response = client.GetAsync("https://api.alexandredubois.com/pont-chaban/api.php");
             var stringResult = response.Result.Content.ReadAsStringAsync();
 
-            var result = JsonConvert.DeserializeObject<List<Boat>>(stringResult.Result);
+            var result = JsonConvert.DeserializeObject<List<Closurse>>(stringResult.Result);
 
-            return result.OrderBy(Boat => Boat.ClosingDate).ToList();
+            return result.OrderBy(Closurse => Closurse.ClosingDate).ToList();
         }
     }
 }
