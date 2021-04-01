@@ -27,7 +27,7 @@ namespace BridgeMonitor.Controllers
 
         public IActionResult AllClosures()
         {
-            return View();
+            return View(GetBoatsFromApi());
         }
         public IActionResult ClosureDetail()
         {

@@ -5,15 +5,14 @@
     DateTime closing = (DateTime)Model.ClosingDate;
     DateTime now = (DateTime)Model.ReopeningDate;
     TimeSpan diff = closing.Subtract(now);
-
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <div class="text-left">
         <div>Nom: @Model.BoatName / Type: @Model.ClosingType</div>
-        <div>Prochaine fermeture le @closing.DayOfWeek @closing.TimeOfDay</div>
-        <div>Réouverture le @Model.ReopeningDate.DayOfWeek @Model.ReopeningDate.TimeOfDay</div>
+        <div>Prochaine fermeture le @closing.ToString("dddd dd MMMM à HH:mm:ss ")</div>
+        <div>Réouverture le @Model.ReopeningDate.ToString("dddd dd MMMM à HH:mm:ss ")</div>
         <div>Durée: @diff.ToString(@"hh\:mm")</div>
 
         <div>Prochaine fermeture dans <span id="timeRemaining"></span></div>
