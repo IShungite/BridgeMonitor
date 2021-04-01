@@ -1,13 +1,67 @@
 ﻿@model List<Closurse>
 @{
     ViewData["Title"] = "Toutes les fermetures";
+
+    List <Closurse> oldClosurses = new List<Closurse>(Model);
+    List <Closurse> newClosurses = new List<Closurse>(Model);
+
+    var now = DateTime.Now;
+
+    oldClosurses.RemoveAll(closurse => closurse.ClosingDate < now);
+
+    newClosurses.RemoveAll(closurse => closurse.ClosingDate >= now);
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
 
-@foreach (var closurse in Model)
-{
+<h2>Fermetures à venir:</h2>
+<table class="table caption-top">
+    <thead>
+        <tr>
+            <th scope="col">Date de fermeture</th>
+            <th scope="col">Nom du bateau / évènement</th>
+            <th scope="col">Date de la réouverture</th>
+            <th scope="col">Durée de la fermeture</th>
 
-}
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var closure in oldClosurses)
+        {
+            TimeSpan duration = closure.ReopeningDate.Subtract(closure.ClosingDate);
+            <tr>
+                <th>@closure.ClosingDate</th>
+                <td>@closure.BoatName</td>
+                <td>@closure.ReopeningDate</td>
+                <td>@duration.ToString(@"hh\:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>Fermetures passées:</h2>
+<table class="table caption-top">
+    <thead>
+        <tr>
+            <th scope="col">Date de fermeture</th>
+            <th scope="col">Nom du bateau / évènement</th>
+            <th scope="col">Date de la réouverture</th>
+            <th scope="col">Durée de la fermeture</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var closure in newClosurses)
+        {
+            TimeSpan duration = closure.ReopeningDate.Subtract(closure.ClosingDate);
+            <tr>
+                <th>@closure.ClosingDate</th>
+                <td>@closure.BoatName</td>
+                <td>@closure.ReopeningDate</td>
+                <td>@duration.ToString(@"hh\:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

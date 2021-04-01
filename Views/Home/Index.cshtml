@@ -3,17 +3,17 @@
     ViewData["Title"] = "Prochaine fermeture";
 
     DateTime closing = (DateTime)Model.ClosingDate;
-    DateTime now = (DateTime)Model.ReopeningDate;
-    TimeSpan diff = closing.Subtract(now);
+    DateTime reopening = (DateTime)Model.ReopeningDate;
+    TimeSpan duration = closing.Subtract(reopening);
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
     <div class="text-left">
         <div>Nom: @Model.BoatName / Type: @Model.ClosingType</div>
-        <div>Prochaine fermeture le @closing.ToString("dddd dd MMMM à HH:mm:ss ")</div>
-        <div>Réouverture le @Model.ReopeningDate.ToString("dddd dd MMMM à HH:mm:ss ")</div>
-        <div>Durée: @diff.ToString(@"hh\:mm")</div>
+        <div>Prochaine fermeture le @closing.ToString("dddd dd MMMM à HH:mm:ss")</div>
+        <div>Réouverture le @reopening.ToString("dddd dd MMMM à HH:mm:ss")</div>
+        <div>Durée: @duration.ToString(@"hh\:mm")</div>
 
         <div>Prochaine fermeture dans <span id="timeRemaining"></span></div>
         <div>
