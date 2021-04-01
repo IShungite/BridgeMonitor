@@ -1,15 +1,17 @@
-﻿@model List<Closurse>
+﻿@model List<Closure>
 @{
     ViewData["Title"] = "Toutes les fermetures";
 
-    List <Closurse> oldClosurses = new List<Closurse>(Model);
-    List <Closurse> newClosurses = new List<Closurse>(Model);
+    List <Closure> oldClosurses = new List<Closure>(Model);
+    List <Closure> newClosurses = new List<Closure>(Model);
 
     var now = DateTime.Now;
 
-    oldClosurses.RemoveAll(closurse => closurse.ClosingDate < now);
+    oldClosurses.RemoveAll(closure => closure.ClosingDate < now);
 
-    newClosurses.RemoveAll(closurse => closurse.ClosingDate >= now);
+    newClosurses.RemoveAll(closure => closure.ClosingDate >= now);
+
+    int id = 0;
 }
 
 <div class="text-center">
@@ -28,15 +30,19 @@
         </tr>
     </thead>
     <tbody>
+
         @foreach (var closure in oldClosurses)
         {
             TimeSpan duration = closure.ReopeningDate.Subtract(closure.ClosingDate);
-            <tr>
-                <th>@closure.ClosingDate</th>
-                <td>@closure.BoatName</td>
-                <td>@closure.ReopeningDate</td>
-                <td>@duration.ToString(@"hh\:mm")</td>
-            </tr>
+            
+        <tr>
+            <th>@closure.ClosingDate</th>
+            <td>@closure.BoatName</td>
+            <td>@closure.ReopeningDate</td>
+            <td>@duration.ToString(@"hh\:mm")</td>
+            <td><a class="btn btn-info" asp-controller="Home" asp-action="ClosureDetail" asp-route-closureId="@id">Détail</a></td>
+        </tr>
+            id++;
         }
     </tbody>
 </table>

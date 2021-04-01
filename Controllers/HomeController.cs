@@ -22,22 +22,28 @@ namespace BridgeMonitor.Controllers
 
         public IActionResult Index()
         {
-            var closurses = GetClosursesFromApi();
+            var closures = GetClosuresFromApi();
 
             var now = DateTime.Now;
 
-            closurses.RemoveAll(closurse => closurse.ReopeningDate < now);
+            closures.RemoveAll(closure => closure.ReopeningDate < now);
 
-            return View(closurses[0]);
+            return View(closures[0]);
         }
 
         public IActionResult AllClosures()
         {
-            return View(GetClosursesFromApi());
+            return View(GetClosuresFromApi());
         }
-        public IActionResult ClosureDetail()
+        public IActionResult ClosureDetail(int closureId)
         {
-            return View();
+            var closures = GetClosuresFromApi();
+
+            var now = DateTime.Now;
+
+            closures.RemoveAll(closure => closure.ReopeningDate < now);
+
+            return View(closures[closureId]);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -46,16 +52,16 @@ namespace BridgeMonitor.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        private static List<Closurse> GetClosursesFromApi()
+        private static List<Closure> GetClosuresFromApi()
         {
             var client = new HttpClient();
 
             var response = client.GetAsync("https://api.alexandredubois.com/pont-chaban/api.php");
             var stringResult = response.Result.Content.ReadAsStringAsync();
 
-            var result = JsonConvert.DeserializeObject<List<Closurse>>(stringResult.Result);
+            var result = JsonConvert.DeserializeObject<List<Closure>>(stringResult.Result);
 
-            return result.OrderBy(Closurse => Closurse.ClosingDate).ToList();
+            return result.OrderBy(Closure => Closure.ClosingDate).ToList();
         }
     }
 }

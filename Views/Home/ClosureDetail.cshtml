@@ -1,7 +1,55 @@
-﻿@{
-    ViewData["Title"] = "Détail d'une fermeture";
+﻿@model Closure
+@{
+    ViewData["Title"] = "Détail de la fermeture";
+
+    DateTime closing = (DateTime)Model.ClosingDate;
+    DateTime reopening = (DateTime)Model.ReopeningDate;
+    TimeSpan duration = closing.Subtract(reopening);
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
+    <div class="text-left">
+        <div>Nom: @Model.BoatName / Type: @Model.ClosingType</div>
+        <div>Prochaine fermeture le @closing.ToString("dddd dd MMMM à HH:mm:ss")</div>
+        <div>Réouverture le @reopening.ToString("dddd dd MMMM à HH:mm:ss")</div>
+        <div>Durée: @duration.ToString(@"hh\:mm")</div>
+
+        <div>Prochaine fermeture dans <span id="timeRemaining"></span></div>
+        <div>
+            Risque de bouchons : @if ((closing.Hour >= 7 && closing.Hour <= 9) || (closing.Hour >= 17 && closing.Hour <= 19))
+            {
+                <text>élevé</text>
+            }
+            else
+            {
+                <text>faible</text>
+            }
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var closingDate = "@closing";
+        closingDate = new Date(closingDate).getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime()
+            const distance = closingDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("timeRemaining").innerHTML = `${days} jours ${hours} heures ${minutes} minutes et ${seconds} secondes`;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("timeRemaining").innerHTML = "EXPIRÉ";
+              }
+        }, 1000);
+
+    </script>
+}
