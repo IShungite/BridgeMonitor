@@ -22,7 +22,7 @@ namespace BridgeMonitor.Controllers
 
         public IActionResult Index()
         {
-            return View(GetBoatsFromApi());
+            return View(GetBoatsFromApi()[0]);
         }
 
         public IActionResult AllClosures()
@@ -48,7 +48,8 @@ namespace BridgeMonitor.Controllers
             var stringResult = response.Result.Content.ReadAsStringAsync();
 
             var result = JsonConvert.DeserializeObject<List<Boat>>(stringResult.Result);
-            return result;
+
+            return result.OrderBy(Boat => Boat.ClosingDate).ToList();
         }
     }
 }

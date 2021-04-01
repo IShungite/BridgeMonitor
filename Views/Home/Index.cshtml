@@ -1,14 +1,51 @@
-﻿@{
+﻿@model Boat
+@{
     ViewData["Title"] = "Prochaine fermeture";
+
+    DateTime closing = (DateTime)Model.ClosingDate;
+    DateTime now = (DateTime)Model.ReopeningDate;
+    TimeSpan diff = closing.Subtract(now);
 }
 
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
+    <div class="text-left">
+        <div>Nom: @Model.BoatName / Type: @Model.ClosingType</div>
+        <div>Prochaine fermeture le @Model.ClosingDate.DayOfWeek @Model.ClosingDate.TimeOfDay</div>
+        <div>Réouverture le @Model.ReopeningDate.DayOfWeek @Model.ReopeningDate.TimeOfDay</div>
+        <div>Durée: @diff.ToString(@"hh\:mm")</div>
+
+        <div>Prochaine fermeture dans <span id="timeRemaining"></span></div>
+    </div>
 </div>
 
-<div class="text-left">
-    @foreach (var boat in Model)
-    {
-        <div>@boat.BoatName</div>
-    }
-</div>
+@section Scripts {
+    <script type="text/javascript">
+        const closingDate = "@closing";
+
+
+        const countDownDate = new Date(closingDate).getTime();
+
+        console.log(closingDate);
+        console.log(countDownDate);
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime()
+            console.log(now);
+            const distance = countDownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("timeRemaining").innerHTML = `${days} jours ${hours} heures ${minutes} minutes et ${seconds} secondes`;
+
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("timeRemaining").innerHTML = "EXPIRÉ";
+              }
+        }, 1000);
+
+    </script>
+}
