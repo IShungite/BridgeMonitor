@@ -23,7 +23,11 @@ namespace BridgeMonitor.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult AllClosures()
+        {
+            return View();
+        }
+        public IActionResult ClosureDetail()
         {
             return View();
         }
