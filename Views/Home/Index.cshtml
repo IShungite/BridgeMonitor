@@ -5,3 +5,10 @@
 <div class="text-center">
     <h1 class="display-4">@ViewData["Title"]</h1>
 </div>
+
+<div class="text-left">
+    @foreach (var boat in Model)
+    {
+        <div>@boat.BoatName</div>
+    }
+</div>
